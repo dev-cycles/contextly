@@ -67,6 +67,12 @@ let private (|UpperCase|_|) (ct: string) =
     else
         None
 
+let private (|KebabCase|_|) (ct: string) =
+    if ct.Contains("-") && ct.ToLower() = ct then
+        Some()
+    else
+        None
+
 let private termFilter = id
 
 let private upper (s: string) = s.ToUpper()
@@ -117,13 +123,15 @@ let private candidateTermsToCaseMatchedCompletionData
     let upperCase = ("", upper, upper)
     let camelCase = ("", lower, title)
     let pascalCase = ("", title, title)
+    let kebabCase = ("-", lower, lower)
 
     let tokenCombinationGenerator =
         match caseTemplate with
         | Some(UpperCase) -> candidateTerms |> tokenCombinations [ upperCase; upperSnakeCase ]
         | Some(PascalCase) -> candidateTerms |> tokenCombinations [ pascalCase; upperSnakeCase ]
         | Some(CamelCase) -> candidateTerms |> tokenCombinations [ camelCase; snakeCase ]
-        | _ -> candidateTerms |> tokenCombinations [ camelCase; pascalCase; snakeCase ]
+        | Some(KebabCase) -> candidateTerms |> tokenCombinations [ kebabCase; snakeCase ]
+        | _ -> candidateTerms |> tokenCombinations [ camelCase; pascalCase; snakeCase; kebabCase ]
 
     tokenCombinationGenerator term
 

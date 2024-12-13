@@ -102,6 +102,7 @@ let tests =
                  "multiWord"
                  "MultiWord"
                  "multi_word"
+                 "multi-word"
              })
             ("Multi Word",
              Some "m",
@@ -127,6 +128,7 @@ let tests =
                  "multiWord"
                  "MultiWord"
                  "multi_word"
+                 "multi-word"
              })
             ("multi word",
              Some "m",
